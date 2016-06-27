@@ -123,7 +123,33 @@ public class ParkingController {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-    private void updateParkingLocation(@PathVariable String locationName, @RequestBody ParkingLocation parkingLocation) {
+    public void updateParkingLocation(@PathVariable String locationName, @RequestBody ParkingLocation parkingLocation) {
         service.manageSlots(parkingLocation);
+    }
+
+    @ApiOperation(value = "Delete all the parking locations.")
+    @RequestMapping(value = "/locations", method = RequestMethod.DELETE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")
+    })
+    public void deleteAllLocations() {
+        service.deleteAll();
+    }
+
+    @ApiOperation(value = "Delete the requested parking location.")
+    @RequestMapping(value = "/locations/{locationName}", method = RequestMethod.DELETE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
+                    dataType = "string", paramType = "path")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")
+    })
+    public void deleteLocation(@PathVariable String locationName) {
+        service.deleteLocation(locationName);
     }
 }

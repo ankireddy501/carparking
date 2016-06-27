@@ -16,7 +16,7 @@ public class ParkingLocation {
 	private String name;
 	private double lattitude;
 	private double longitude;
-	private List<ParkingSlot> slots = new ArrayList<>();
+	private List<ParkingSlot> slots = new ArrayList();
 	private Integer total;
 	private Integer available;
 
@@ -72,6 +72,10 @@ public class ParkingLocation {
 	public void setAvailable(Integer available) {
 		this.available = available;
 	}
+
+    public String getId() {
+        return id;
+    }
 
 	@Override
 	public String toString() {

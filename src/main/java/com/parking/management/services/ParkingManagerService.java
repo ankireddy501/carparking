@@ -1,15 +1,13 @@
 package com.parking.management.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.parking.management.beans.ParkingLocation;
 import com.parking.management.beans.ParkingSlot;
 import com.parking.management.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ParkingManagerService {
@@ -70,7 +68,7 @@ public class ParkingManagerService {
 	}
 
 	private List<ParkingSlot> getSlots(List<ParkingSlot> slots) {
-		List<ParkingSlot> list = new ArrayList<>();
+		List<ParkingSlot> list = new ArrayList();
 		
 		ParkingSlot slot;
 		for(ParkingSlot parkingSlot: slots)
@@ -107,5 +105,14 @@ public class ParkingManagerService {
 
     public ParkingLocation findByLocationName(String name) {
         return repository.findDistinctParkingLocationByName(name);
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
+    public void deleteLocation(String name) {
+        ParkingLocation location = repository.findDistinctParkingLocationByName(name);
+        repository.delete(location.getId());
     }
 }
