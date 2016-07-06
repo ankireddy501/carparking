@@ -115,4 +115,10 @@ public class ParkingManagerService {
         ParkingLocation location = repository.findDistinctParkingLocationByName(name);
         repository.delete(location.getId());
     }
+
+    public void activateLocation(String name, boolean active) {
+        ParkingLocation location = repository.findDistinctParkingLocationByName(name);
+        location.setActive(active);
+        repository.save(location);
+    }
 }

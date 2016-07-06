@@ -4,7 +4,6 @@ import com.parking.management.beans.ParkingLocation;
 import com.parking.management.beans.ParkingLocations;
 import com.parking.management.beans.ParkingSlot;
 import com.parking.management.services.ParkingManagerService;
-import com.parking.management.repository.ParkingRepository;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,8 @@ public class ParkingController {
 		for(ParkingLocation location: service.findAllLocation())
 		{
 			Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
-			localLocation = new ParkingLocation(location.getName(), location.getLattitude(),
-                    location.getLongitude(), total, service.getAvailabilityForSlots(location.getSlots()));
+			localLocation = new ParkingLocation(location.getName(), location.getLattitude(), location.getLongitude(),
+                    total, service.getAvailabilityForSlots(location.getSlots()), location.isActive());
 			locations.getLocations().add(localLocation);
 		}
 		
@@ -56,7 +55,8 @@ public class ParkingController {
         ParkingLocation location = service.findByLocationName(locationName);
         Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
         ParkingLocation parkingLocation = new ParkingLocation(location.getName(), location.getLattitude(),
-                location.getLongitude(), total, service.getAvailabilityForSlots(location.getSlots()));
+                location.getLongitude(), total,
+                service.getAvailabilityForSlots(location.getSlots()), location.isActive());
 
         for (ParkingSlot slot : location.getSlots())
         {
@@ -83,7 +83,7 @@ public class ParkingController {
 		ParkingLocation location = service.findByLocationName(locationName);
 		Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
 		return new ParkingLocation(location.getName(), location.getLattitude(), location.getLongitude(),
-                total, service.getAvailabilityForSlots(location.getSlots()));
+                total, service.getAvailabilityForSlots(location.getSlots()), location.isActive());
 	}
 
     @ApiOperation(value = "Provides the status of the requested parking slot in a location.")
@@ -151,5 +151,35 @@ public class ParkingController {
     })
     public void deleteLocation(@PathVariable String locationName) {
         service.deleteLocation(locationName);
+    }
+
+    @ApiOperation(value = "Shutdown the parking location.")
+    @RequestMapping(value = "/locations/{locationName}/_shutdown", method = RequestMethod.PUT)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
+                    dataType = "string", paramType = "path")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")
+    })
+    public void shutDownLocation(@PathVariable String locationName) {
+        service.activateLocation(locationName, false);
+    }
+
+    @ApiOperation(value = "Activate the parking location.")
+    @RequestMapping(value = "/locations/{locationName}/_activate", method = RequestMethod.PUT)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
+                    dataType = "string", paramType = "path")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")
+    })
+    public void activateLocation(@PathVariable String locationName) {
+        service.activateLocation(locationName, true);
     }
 }

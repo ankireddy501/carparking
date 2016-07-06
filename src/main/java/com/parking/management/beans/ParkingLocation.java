@@ -19,15 +19,22 @@ public class ParkingLocation {
 	private List<ParkingSlot> slots = new ArrayList();
 	private Integer total;
 	private Integer available;
+    private boolean active;
 
-	public ParkingLocation(String name, double lattitude, double longitude, Integer total, Integer available) {
+	public ParkingLocation(String name,
+                           double lattitude,
+                           double longitude,
+                           Integer total,
+                           Integer available,
+                           boolean active) {
 		super();
 		this.name = name;
 		this.lattitude = lattitude;
 		this.longitude = longitude;
 		this.total = total;
 		this.available = available;
-	}
+        this.active = active;
+    }
 
 	public String getName() {
 		return name;
@@ -75,6 +82,14 @@ public class ParkingLocation {
 
     public String getId() {
         return id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 	@Override
