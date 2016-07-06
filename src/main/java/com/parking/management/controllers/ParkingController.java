@@ -160,7 +160,7 @@ public class ParkingController {
                     dataType = "string", paramType = "path")
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 200, message = "Updated"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
@@ -175,7 +175,7 @@ public class ParkingController {
                     dataType = "string", paramType = "path")
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Deleted"),
+            @ApiResponse(code = 200, message = "Updated"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
