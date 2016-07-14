@@ -63,6 +63,11 @@
             <version>2.2.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.ning</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>1.7.17</version>
+        </dependency>
 	</dependencies>
 	
 	<build>

@@ -2,6 +2,7 @@ package com.parking.management.services;
 
 import com.parking.management.beans.ParkingLocation;
 import com.parking.management.beans.ParkingSlot;
+import com.parking.management.externalservices.CollaborationAdapter;
 import com.parking.management.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class ParkingManagerService {
 
     @Autowired
     ParkingRepository repository;
+
+    @Autowired
+    CollaborationAdapter collaborationAdapter;
 	
 	public ParkingManagerService() {}
 	
@@ -45,17 +49,28 @@ public class ParkingManagerService {
 					{
 						updatableSlot.setStatus(newSlot.getStatus());
 						updatableSlot.setOwnerId(newSlot.getOwnerId());
+                        if (!updatableSlot.getStatus().equals(newSlot.getStatus())) {
+                            collaborationAdapter.postUpdateToFeed(location.getName(), newSlot.getName(),
+                                    !newSlot.getStatus().equals(AVAILABLE));
+                        }
 					}
 					else
 					{
 						oldLocation.getSlots().add(new ParkingSlot(newSlot.getName(),
                                 newSlot.getStatus(), newSlot.getOwnerId()));
+                        collaborationAdapter.postUpdateToFeed(location.getName(), newSlot.getName(),
+                                !newSlot.getStatus().equals(AVAILABLE));
 					}
 				}
 			}
 			else
             {
-				oldLocation.getSlots().addAll(getSlots(location.getSlots()));
+                List<ParkingSlot> slots = getSlots(location.getSlots());
+                oldLocation.getSlots().addAll(slots);
+                for (ParkingSlot slot : slots) {
+                    collaborationAdapter.postUpdateToFeed(location.getName(), slot.getName(),
+                            !slot.getStatus().equals(AVAILABLE));
+                }
 			}
 
             repository.save(oldLocation);
@@ -63,8 +78,11 @@ public class ParkingManagerService {
 		else
         {
             repository.save(location);
+            for (ParkingSlot slot : location.getSlots()) {
+                collaborationAdapter.postUpdateToFeed(location.getName(), slot.getName(),
+                        !slot.getStatus().equals(AVAILABLE));
+            }
 		}
-
 	}
 
 	private List<ParkingSlot> getSlots(List<ParkingSlot> slots) {

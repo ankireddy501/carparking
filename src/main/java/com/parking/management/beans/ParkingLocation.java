@@ -19,7 +19,7 @@ public class ParkingLocation {
 	private List<ParkingSlot> slots = new ArrayList();
 	private Integer total;
 	private Integer available;
-    private boolean active;
+    private boolean active = true;
 
 	public ParkingLocation(String name,
                            double lattitude,
