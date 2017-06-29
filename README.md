@@ -6,7 +6,7 @@ For setting up the application please follow the steps
 3. Execute the bat file to start mongo db.
 4. Start the application using the maven command "mvn spring-boot:run".
 
-'''json
+```json
 {   "name": "SoftwareAG", 
 	"lattitude":"",
 	"longitude":"",
@@ -28,4 +28,4 @@ For setting up the application please follow the steps
 	"total": 2, 
 	"available": 2
 }
-'''
+```
