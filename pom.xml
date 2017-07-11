@@ -76,11 +76,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
                 <!-- Enable the configuration to enable debug mode.-->
-                <configuration>
-                    <jvmArguments>
-                        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
-                    </jvmArguments>
-                </configuration>
 			</plugin>
             <plugin>
                 <groupId>com.github.kongchen</groupId>

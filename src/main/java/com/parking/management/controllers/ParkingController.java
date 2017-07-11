@@ -12,35 +12,34 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/parkingmgmt")
 public class ParkingController {
 
-	@Autowired
+    @Autowired
     ParkingManagerService service;
 
     @ApiOperation(value = "Provides all the parking locations available in the system.")
-	@RequestMapping(value = "/locations", method = RequestMethod.GET)
+    @RequestMapping(value = "/locations", method = RequestMethod.GET)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = ParkingLocations.class),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-	public ParkingLocations getAllLocation()
-	{
-		ParkingLocations locations = new ParkingLocations();
-		
-		ParkingLocation localLocation;
+    public ParkingLocations getAllLocation() {
+        ParkingLocations locations = new ParkingLocations();
 
-		for(ParkingLocation location: service.findAllLocation())
-		{
-			Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
-			localLocation = new ParkingLocation(location.getName(), location.getLattitude(), location.getLongitude(),
-                    total, service.getAvailabilityForSlots(location.getSlots()), location.isActive());
-			locations.getLocations().add(localLocation);
-		}
-		
-		return locations;
-	}
+        ParkingLocation localLocation;
+
+        for (ParkingLocation location : service.findAllLocation()) {
+            Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
+            localLocation = new ParkingLocation(location.getName(), location.getLattitude(),
+                    location.getLongitude(), total, service.getAvailabilityForSlots(location.getSlots()),
+                    location.isActive(), location.getLayout());
+            locations.getLocations().add(localLocation);
+        }
+
+        return locations;
+    }
 
     @ApiOperation(value = "Provides all the information of the parking location requested.")
-	@RequestMapping(value = "/locations/{locationName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/locations/{locationName}", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
                     dataType = "string", paramType = "path")
@@ -50,17 +49,17 @@ public class ParkingController {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-	public ParkingLocation getLocation(@PathVariable String locationName)
-	{
+    public ParkingLocation getLocation(@PathVariable String locationName) {
         ParkingLocation location = service.findByLocationName(locationName);
         Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
         ParkingLocation parkingLocation = new ParkingLocation(location.getName(), location.getLattitude(),
                 location.getLongitude(), total,
-                service.getAvailabilityForSlots(location.getSlots()), location.isActive());
+                service.getAvailabilityForSlots(location.getSlots()), location.isActive(),
+                location.getLayout());
 
-        for (ParkingSlot slot : location.getSlots())
-        {
-            parkingLocation.getSlots().add(new ParkingSlot(slot.getName(), slot.getStatus(), slot.getOwnerId()));
+        for (ParkingSlot slot : location.getSlots()) {
+            parkingLocation.getSlots().add(new ParkingSlot(slot.getName(), slot.getStatus(),
+                    slot.getOwnerId()));
         }
 
         return parkingLocation;
@@ -68,7 +67,7 @@ public class ParkingController {
 
     @ApiOperation(value = "Provides the status of the parking location requested. " +
             "The status would contain information regarding the total slots available.")
-	@RequestMapping(value = "/locations/{locationName}/_status", method = RequestMethod.GET)
+    @RequestMapping(value = "/locations/{locationName}/_status", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
                     dataType = "string", paramType = "path")
@@ -78,16 +77,16 @@ public class ParkingController {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-	public ParkingLocation getLocationStatus(@PathVariable String locationName)
-	{
-		ParkingLocation location = service.findByLocationName(locationName);
-		Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
-		return new ParkingLocation(location.getName(), location.getLattitude(), location.getLongitude(),
-                total, service.getAvailabilityForSlots(location.getSlots()), location.isActive());
-	}
+    public ParkingLocation getLocationStatus(@PathVariable String locationName) {
+        ParkingLocation location = service.findByLocationName(locationName);
+        Integer total = location.getSlots().size() == 0 ? null : location.getSlots().size();
+        return new ParkingLocation(location.getName(), location.getLattitude(), location.getLongitude(),
+                total, service.getAvailabilityForSlots(location.getSlots()), location.isActive(),
+                location.getLayout());
+    }
 
     @ApiOperation(value = "Provides the status of the requested parking slot in a location.")
-	@RequestMapping(value = "/locations/{locationName}/{slotName}/_status", method = RequestMethod.GET)
+    @RequestMapping(value = "/locations/{locationName}/{slotName}/_status", method = RequestMethod.GET)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "locationName", value = "Name of the location", required = true,
                     dataType = "string", paramType = "path"),
@@ -99,18 +98,15 @@ public class ParkingController {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-	public ParkingSlot getLocationSlotStatus(@PathVariable String locationName, @PathVariable String slotName)
-	{
-		for(ParkingSlot slot: service.findByLocationName(locationName).getSlots())
-		{
-			if(slot.getName().equalsIgnoreCase(slotName))
-			{
-				return slot;
-			}
-		}
-		
-		return null;
-	}
+    public ParkingSlot getLocationSlotStatus(@PathVariable String locationName, @PathVariable String slotName) {
+        for (ParkingSlot slot : service.findByLocationName(locationName).getSlots()) {
+            if (slot.getName().equalsIgnoreCase(slotName)) {
+                return slot;
+            }
+        }
+
+        return null;
+    }
 
     @ApiOperation(value = "Updates the parking slot information for the provided parking location.")
     @RequestMapping(value = "/locations/{locationName}", method = RequestMethod.POST)
@@ -123,7 +119,8 @@ public class ParkingController {
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")
     })
-    public void updateParkingLocation(@PathVariable String locationName, @RequestBody ParkingLocation parkingLocation) {
+    public void updateParkingLocation(@PathVariable String locationName,
+                                      @RequestBody ParkingLocation parkingLocation) {
         service.manageSlots(parkingLocation);
     }
 
