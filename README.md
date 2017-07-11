@@ -30,6 +30,7 @@ Response:
 		"slots": [],
 		"total": 4,
 		"available": 2,
+		"layout":"LISTVIEW",
 		"active": true
 	},
 	  {
@@ -40,6 +41,7 @@ Response:
 		"slots": [],
 		"total": 2,
 		"available": 2,
+		"layout":"GRIDVIEW",
 		"active": true
 	  }
 	],
@@ -82,6 +84,7 @@ Response:
 	],
 	"total": 4,
 	"available": 2,
+	"layout":"LISTVIEW",
 	"active": true
 }
 ```
@@ -112,6 +115,7 @@ Response:
 	]
 	,
 	"total": 2, 
+	"layout":"LISTVIEW",
 	"available": 2
 }
 ```
