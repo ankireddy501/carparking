@@ -6,7 +6,7 @@
 	<groupId>com.parking.management</groupId>
 	<artifactId>parking-management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>ParkingManagementSystem</name>
 	<description>Parking Management IoT project</description>
