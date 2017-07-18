@@ -1,0 +1,13 @@
+#! /bin/sh 
+
+case "$1" in 
+      start) 
+            cd /etc/init.d
+            sudo sh ./parkingpi-engine-start.sh & 
+            ;; 
+      stop) 
+            cd /etc/init.d
+			sudo sh ./parkingpi-engine-stop.sh &
+            ;; 
+esac 
+exit 0
