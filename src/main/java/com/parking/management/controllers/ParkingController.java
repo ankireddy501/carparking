@@ -8,6 +8,9 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/parkingmgmt")
 public class ParkingController {
@@ -57,7 +60,9 @@ public class ParkingController {
                 service.getAvailabilityForSlots(location.getSlots()), location.isActive(),
                 location.getLayout());
 
-        for (ParkingSlot slot : location.getSlots()) {
+        List<ParkingSlot> slots = location.getSlots();
+        Collections.sort(slots);
+        for (ParkingSlot slot : slots) {
             parkingLocation.getSlots().add(new ParkingSlot(slot.getName(), slot.getStatus(),
                     slot.getOwnerId()));
         }
