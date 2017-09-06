@@ -46,7 +46,6 @@ public class ParkingSlot implements Comparable<ParkingSlot> {
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
-
     @Override
     public int compareTo(ParkingSlot other) {
         return name.compareTo(other.name);
