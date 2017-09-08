@@ -61,7 +61,7 @@ public class ParkingController {
                 location.getLayout());
 
         List<ParkingSlot> slots = location.getSlots();
-        Collections.sort(slots);
+        Collections.sort(slots, ParkingSlot.ParkingSlotNameComparator);
         for (ParkingSlot slot : slots) {
             parkingLocation.getSlots().add(new ParkingSlot(slot.getName(), slot.getStatus(),
                     slot.getOwnerId()));

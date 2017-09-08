@@ -5,7 +5,9 @@ package com.parking.management.beans;
 
 import org.springframework.data.annotation.Id;
 
-public class ParkingSlot implements Comparable<ParkingSlot> {
+import java.util.Comparator;
+
+public class ParkingSlot {
 
     public ParkingSlot() {
     }
@@ -46,8 +48,19 @@ public class ParkingSlot implements Comparable<ParkingSlot> {
     public void setOwnerId(long ownerId) {
         this.ownerId = ownerId;
     }
-    @Override
-    public int compareTo(ParkingSlot other) {
-        return name.compareTo(other.name);
-    }
+
+    public static Comparator<ParkingSlot> ParkingSlotNameComparator
+            = new Comparator<ParkingSlot>() {
+
+        public int compare(ParkingSlot slot1, ParkingSlot slot2) {
+
+            String parkingSlot1 = slot1.getName().replaceAll("[^0-9]", "");
+            String parkingSlot2 = slot2.getName().replaceAll("[^0-9]", "");
+            //ascending order
+            return parkingSlot1.compareTo(parkingSlot2);
+            //descending order
+            //return parkingSlot1.compareTo(parkingSlot2);
+        }
+
+    };
 }
