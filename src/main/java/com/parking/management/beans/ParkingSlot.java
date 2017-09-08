@@ -56,10 +56,17 @@ public class ParkingSlot {
 
             String parkingSlot1 = slot1.getName().replaceAll("[^0-9]", "");
             String parkingSlot2 = slot2.getName().replaceAll("[^0-9]", "");
-            //ascending order
-            return parkingSlot1.compareTo(parkingSlot2);
-            //descending order
-            //return parkingSlot1.compareTo(parkingSlot2);
+
+            if (parkingSlot1.isEmpty() || parkingSlot2.isEmpty()) {
+                //ascending order
+                return parkingSlot1.compareTo(parkingSlot2);
+                //descending order
+                //return parkingSlot1.compareTo(parkingSlot2);
+            } else {
+                Integer number1 = Integer.parseInt(parkingSlot1);
+                Integer number2 = Integer.parseInt(parkingSlot2);
+                return number1.compareTo(number2);
+            }
         }
 
     };
